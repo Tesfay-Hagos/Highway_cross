@@ -1,23 +1,30 @@
-from turtle import Turtle, Screen
+from turtle import Turtle
 
-screen = Screen()
+STARTING_POSITION = (0, -280)
+MOVE_DISTANCE = 10
+FINISH_LINE_Y = 280.0
+
+
 class Player (Turtle):
     def __init__(self):
         super().__init__()
         self.shape("turtle")
         self.color("white")
         self.penup()
-        self.shapesize(stretch_wid=1, stretch_len=1)
-        self.goto(0, -280)
-        self.listen_player()
-
-    def listen_player(self):
-        screen.listen()
-        screen.onkey(self.player_up_move, "Up")
-
-    def player_up_move(self):
+        self.go_to_start()
         self.setheading(90)
-        self.forward(10)
+        self.shapesize(stretch_wid=1, stretch_len=1)
 
 
+    def go_up(self):
+        self.forward(MOVE_DISTANCE)
+
+    def go_to_start(self):
+        self.goto(STARTING_POSITION)
+
+    def is_at_finish_line(self):
+        if self.ycor() > FINISH_LINE_Y:
+            return True
+        else:
+            return False
 

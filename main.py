@@ -9,25 +9,35 @@ screen = Screen()
 screen.setup(width=600, height=600)
 screen.bgcolor("black")
 screen.tracer(0)
-player= Player()
 
-y_pos = []
-car_move = []
-start_y = -100
-number_car = [0, 1, 2, 3, 4]
 
-for _ in range(10):
-    y_pos.append(start_y)
-    start_y += 100
+player = Player()
+car_manager = CarManager()
+scoreboard = ScoreBoard()
+
+
+screen.listen()
+screen.onkey(player.go_up, "Up")
 
 
 game_is_on = True
 while game_is_on:
     time.sleep(0.1)
     screen.update()
-    for k in range(random.choice(number_car)):
-        car_move.append(CarManager(y_pos[k]))
-    for car in car_move:
-        time.sleep(0.01)
-        car.move_car()
+    car_manager.creat_car()
+    car_manager.move_cars()
+    for car in car_manager.all_cars:
+        if car.distance(player) < 20:
+            game_is_on = False
+            scoreboard.game_over()
 
+    # Detect the successful crossing
+    if player.is_at_finish_line():
+        player.go_to_start()
+        car_manager.level_up()
+        scoreboard.level_up()
+
+
+
+
+screen.exitonclick()
